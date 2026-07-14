@@ -9,7 +9,8 @@ Salidas:
   web/data/puntos_entrenamiento.geojson
   web/data/puntos_validacion.geojson
 
-Ajusta COL_LONGITUD y COL_LATITUD según las columnas reales de tus archivos.
+Los CSV están en EPSG:32613 (UTM Zona 13N) con columnas coord_x y coord_y.
+El GeoJSON se guarda en EPSG:4326 (WGS84) — estándar requerido por GeoJSON.
 """
 
 from pathlib import Path
@@ -22,9 +23,10 @@ ARCHIVOS = [
     ("data/raw/puntos_validacion.csv", "web/data/puntos_validacion.geojson"),
 ]
 
-COL_LONGITUD = "longitud"
-COL_LATITUD = "latitud"
-CRS_ORIGEN = "EPSG:4326"
+COL_X = "coord_x"
+COL_Y = "coord_y"
+CRS_ORIGEN = "EPSG:32613"
+CRS_SALIDA = "EPSG:4326"
 
 
 def preparar_puntos(input_path: str, output_path: str) -> None:
@@ -39,12 +41,14 @@ def preparar_puntos(input_path: str, output_path: str) -> None:
 
     gdf = gpd.GeoDataFrame(
         df,
-        geometry=gpd.points_from_xy(df[COL_LONGITUD], df[COL_LATITUD]),
+        geometry=gpd.points_from_xy(df[COL_X], df[COL_Y]),
         crs=CRS_ORIGEN,
     )
 
+    gdf = gdf.to_crs(CRS_SALIDA)
+
     gdf.to_file(salida, driver="GeoJSON")
-    print(f"  → GeoJSON guardado en: {salida}")
+    print(f"  → GeoJSON guardado en: {salida} (reproyectado a {CRS_SALIDA})")
 
 
 if __name__ == "__main__":
