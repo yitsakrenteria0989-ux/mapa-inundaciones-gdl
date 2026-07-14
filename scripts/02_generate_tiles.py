@@ -1,7 +1,7 @@
 """
 Genera tiles PNG (formato XYZ) a partir del raster clasificado en EPSG:3857.
 Entrada:  data/raster_3857.tif
-Salida:   web/tiles/{z}/{x}/{y}.png
+Salida:   docs/tiles/{z}/{x}/{y}.png
 
 Paleta de colores:
   1 = Muy bajo     ->verde fuerte  (#1a9641)
@@ -23,7 +23,7 @@ from rasterio.warp import reproject
 from PIL import Image
 
 INPUT = Path("data/raster_3857.tif")
-OUTPUT_DIR = Path("web/tiles")
+OUTPUT_DIR = Path("docs/tiles")
 ZOOM_MIN = 10
 ZOOM_MAX = 14
 TILE_SIZE = 256

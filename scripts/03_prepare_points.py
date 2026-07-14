@@ -6,8 +6,8 @@ Entradas:
   data/raw/puntos_validacion.csv     (coordenadas usadas para validar el modelo)
 
 Salidas:
-  web/data/puntos_entrenamiento.geojson
-  web/data/puntos_validacion.geojson
+  docs/data/puntos_entrenamiento.geojson
+  docs/data/puntos_validacion.geojson
 
 Los CSV están en EPSG:32613 (UTM Zona 13N) con columnas coord_x y coord_y.
 El GeoJSON se guarda en EPSG:4326 (WGS84) — estándar requerido por GeoJSON.
@@ -19,8 +19,8 @@ import geopandas as gpd
 import pandas as pd
 
 ARCHIVOS = [
-    ("data/raw/puntos_entrenamiento.csv", "web/data/puntos_entrenamiento.geojson"),
-    ("data/raw/puntos_validacion.csv", "web/data/puntos_validacion.geojson"),
+    ("data/raw/puntos_entrenamiento.csv", "docs/data/puntos_entrenamiento.geojson"),
+    ("data/raw/puntos_validacion.csv", "docs/data/puntos_validacion.geojson"),
 ]
 
 COL_X = "coord_x"

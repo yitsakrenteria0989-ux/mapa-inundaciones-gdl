@@ -10,7 +10,7 @@ mapa-inundaciones-gdl/
 │   ├── 01_reproject_raster.py   # EPSG:32613 → EPSG:3857
 │   ├── 02_generate_tiles.py     # raster → tiles PNG para el mapa
 │   └── 03_prepare_points.py     # CSV → GeoJSON (puntos de inundación)
-├── web/
+├── docs/
 │   ├── index.html               # página del mapa
 │   ├── tiles/                   # generado por script (no en git)
 │   └── data/                    # GeoJSON de puntos
@@ -42,7 +42,7 @@ python scripts/02_generate_tiles.py      # genera los tiles del mapa
 python scripts/03_prepare_points.py      # convierte CSV a GeoJSON
 ```
 
-### 3. Ajusta las URLs de descarga en web/index.html
+### 3. Ajusta las URLs de descarga en docs/index.html
 
 Busca el bloque `const DOWNLOADS` y reemplaza los links con los de
 GitHub Releases (raster 111 MB) y Zenodo (raster entrenamiento 1 GB).
@@ -50,14 +50,14 @@ GitHub Releases (raster 111 MB) y Zenodo (raster entrenamiento 1 GB).
 ### 4. Prueba localmente
 
 ```bash
-# Desde la carpeta web/
+# Desde la carpeta docs/
 python -m http.server 8000
 # Abre http://localhost:8000
 ```
 
 ### 5. Despliega en GitHub Pages
 
-Sube el contenido de `web/` a la rama `gh-pages` del repositorio.
+Sube el contenido de `docs/` a la rama `gh-pages` del repositorio.
 
 ## Paleta de colores
 
