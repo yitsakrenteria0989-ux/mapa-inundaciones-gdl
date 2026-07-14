@@ -48,7 +48,7 @@ def preparar_puntos(input_path: str, output_path: str) -> None:
     gdf = gdf.to_crs(CRS_SALIDA)
 
     gdf.to_file(salida, driver="GeoJSON")
-    print(f"  → GeoJSON guardado en: {salida} (reproyectado a {CRS_SALIDA})")
+    print(f"  -> GeoJSON guardado en: {salida} (reproyectado a {CRS_SALIDA})")
 
 
 if __name__ == "__main__":

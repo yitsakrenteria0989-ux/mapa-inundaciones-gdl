@@ -35,7 +35,7 @@ def reproyectar():
             transform=transform,
             width=width,
             height=height,
-            nodata=0,
+            nodata=0,  # -9999 del origen se convierte a 0 → transparente en tiles
         )
 
         with rasterio.open(OUTPUT, "w", **kwargs) as dst:

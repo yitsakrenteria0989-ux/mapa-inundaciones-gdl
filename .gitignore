@@ -6,5 +6,5 @@ venv/
 # rasters originales (demasiado grandes para el repo)
 data/raw/
 
-# tiles generados localmente — se suben a GitHub Pages via Action
-web/tiles/
+# rasters procesados (regenerables con los scripts)
+data/raster_3857.tif

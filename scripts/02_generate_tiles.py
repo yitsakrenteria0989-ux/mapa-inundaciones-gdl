@@ -4,12 +4,12 @@ Entrada:  data/raster_3857.tif
 Salida:   web/tiles/{z}/{x}/{y}.png
 
 Paleta de colores:
-  1 = Muy bajo     → verde fuerte  (#1a9641)
-  2 = Bajo         → verde claro   (#a6d96a)
-  3 = Moderado     → amarillo      (#ffffbf)
-  4 = Alto         → naranja       (#fdae61)
-  5 = Muy alto     → rojo          (#d7191c)
-  0 = NoData       → transparente
+  1 = Muy bajo     ->verde fuerte  (#1a9641)
+  2 = Bajo         ->verde claro   (#a6d96a)
+  3 = Moderado     ->amarillo      (#ffffbf)
+  4 = Alto         ->naranja       (#fdae61)
+  5 = Muy alto     ->rojo          (#d7191c)
+  0 = NoData       ->transparente
 """
 
 from pathlib import Path
@@ -49,7 +49,7 @@ def generar_tile(src, tile: mercantile.Tile) -> Image.Image | None:
     bounds = mercantile.xy_bounds(tile)
 
     tile_transform = from_bounds(
-        bounds.west, bounds.south, bounds.east, bounds.north,
+        bounds.left, bounds.bottom, bounds.right, bounds.top,
         TILE_SIZE, TILE_SIZE,
     )
 
@@ -100,7 +100,7 @@ def generar_tiles():
                 img.save(ruta / f"{tile.y}.png", "PNG")
                 generadas += 1
 
-            print(f"  → {generadas} tiles con datos guardadas")
+            print(f"  ->{generadas} tiles con datos guardadas")
 
     print(f"\nTiles generadas en: {OUTPUT_DIR}")
 
