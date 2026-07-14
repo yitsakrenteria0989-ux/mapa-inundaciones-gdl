@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# rasters originales (demasiado grandes para el repo)
+data/raw/
+
+# tiles generados localmente — se suben a GitHub Pages via Action
+web/tiles/

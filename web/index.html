@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Susceptibilidad a Inundaciones — Área Metropolitana de Guadalajara</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #f0f4f8;
+      color: #1a202c;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    header {
+      background: #1a365d;
+      color: white;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+
+    header h1 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+
+    header p {
+      font-size: 0.8rem;
+      opacity: 0.75;
+      margin-top: 2px;
+    }
+
+    #main {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    #map {
+      flex: 1;
+    }
+
+    #panel {
+      width: 300px;
+      background: white;
+      padding: 20px;
+      overflow-y: auto;
+      border-left: 1px solid #e2e8f0;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      flex-shrink: 0;
+    }
+
+    #panel h2 {
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #4a5568;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 8px;
+    }
+
+    .leyenda-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .leyenda-color {
+      width: 28px;
+      height: 28px;
+      border-radius: 4px;
+      border: 1px solid rgba(0,0,0,0.15);
+      flex-shrink: 0;
+    }
+
+    .leyenda-texto strong {
+      display: block;
+      font-size: 0.9rem;
+    }
+
+    .leyenda-texto span {
+      font-size: 0.75rem;
+      color: #718096;
+    }
+
+    #panel p {
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: #4a5568;
+    }
+
+    .descarga-btn {
+      display: block;
+      background: #2b6cb0;
+      color: white;
+      text-decoration: none;
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      text-align: center;
+      margin-bottom: 8px;
+      transition: background 0.15s;
+    }
+
+    .descarga-btn:hover { background: #2c5282; }
+
+    .descarga-btn.secundario {
+      background: #e2e8f0;
+      color: #2d3748;
+    }
+
+    .descarga-btn.secundario:hover { background: #cbd5e0; }
+
+    footer {
+      background: #1a365d;
+      color: rgba(255,255,255,0.6);
+      text-align: center;
+      font-size: 0.75rem;
+      padding: 8px;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Susceptibilidad a Inundaciones</h1>
+    <p>Área Metropolitana de Guadalajara, Jalisco</p>
+  </div>
+</header>
+
+<div id="main">
+  <div id="map"></div>
+
+  <div id="panel">
+
+    <div>
+      <h2>Leyenda</h2>
+      <br>
+      <div class="leyenda-item">
+        <div class="leyenda-color" style="background:#1a9641;"></div>
+        <div class="leyenda-texto">
+          <strong>Muy baja</strong>
+          <span>Probabilidad 0 – 0.2</span>
+        </div>
+      </div>
+      <div class="leyenda-item">
+        <div class="leyenda-color" style="background:#a6d96a;"></div>
+        <div class="leyenda-texto">
+          <strong>Baja</strong>
+          <span>Probabilidad 0.2 – 0.4</span>
+        </div>
+      </div>
+      <div class="leyenda-item">
+        <div class="leyenda-color" style="background:#ffffbf;border-color:#ccc;"></div>
+        <div class="leyenda-texto">
+          <strong>Moderada</strong>
+          <span>Probabilidad 0.4 – 0.6</span>
+        </div>
+      </div>
+      <div class="leyenda-item">
+        <div class="leyenda-color" style="background:#fdae61;"></div>
+        <div class="leyenda-texto">
+          <strong>Alta</strong>
+          <span>Probabilidad 0.6 – 0.8</span>
+        </div>
+      </div>
+      <div class="leyenda-item">
+        <div class="leyenda-color" style="background:#d7191c;"></div>
+        <div class="leyenda-texto">
+          <strong>Muy alta</strong>
+          <span>Probabilidad 0.8 – 1.0</span>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <h2>¿Qué muestra este mapa?</h2>
+      <br>
+      <p>
+        El mapa muestra la <strong>susceptibilidad espacial a inundaciones</strong>
+        en el Área Metropolitana de Guadalajara, estimada mediante un modelo de
+        aprendizaje automático entrenado con registros históricos de inundaciones
+        y variables geoespaciales.
+      </p>
+      <br>
+      <p>
+        Las zonas en <strong style="color:#d7191c;">rojo</strong> presentan las
+        condiciones físicas más favorables para que ocurran inundaciones
+        (pendientes bajas, alta impermeabilidad, proximidad a cuerpos de agua).
+        Las zonas en <strong style="color:#1a9641;">verde</strong> son menos
+        propensas bajo condiciones normales.
+      </p>
+      <br>
+      <p>
+        <strong>Importante:</strong> Este mapa representa susceptibilidad
+        intrínseca del terreno, no la probabilidad de inundación ante un evento
+        lluvioso específico.
+      </p>
+    </div>
+
+    <div>
+      <h2>Descargar datos</h2>
+      <br>
+      <a class="descarga-btn" href="#" id="btn-raster">
+        ⬇ Raster clasificado (.tif)
+      </a>
+      <a class="descarga-btn secundario" href="#" id="btn-entrenamiento">
+        ⬇ Puntos de entrenamiento (.csv)
+      </a>
+      <a class="descarga-btn secundario" href="#" id="btn-validacion">
+        ⬇ Puntos de validación (.csv)
+      </a>
+      <a class="descarga-btn secundario" href="#" id="btn-modelo">
+        ⬇ Raster de variables del modelo (.tif)
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  Mapa generado con datos geoespaciales abiertos · Jalisco, México
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+  // Coordenadas centradas en Guadalajara
+  const map = L.map('map').setView([20.67, -103.35], 11);
+
+  // Mapa base OpenStreetMap
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    maxZoom: 18,
+  }).addTo(map);
+
+  // Capa de susceptibilidad (tiles generados localmente)
+  L.tileLayer('tiles/{z}/{x}/{y}.png', {
+    opacity: 0.75,
+    maxZoom: 14,
+    minZoom: 10,
+    tms: false,
+  }).addTo(map);
+
+  // URLs de descarga — reemplazar con los links reales de GitHub Releases / Zenodo
+  const DOWNLOADS = {
+    'btn-raster':        'https://github.com/TU_USUARIO/mapa-inundaciones-gdl/releases/download/v1.0/raster_clasificado.tif',
+    'btn-entrenamiento': 'data/puntos_entrenamiento.geojson',
+    'btn-validacion':    'data/puntos_validacion.geojson',
+    'btn-modelo':        'https://zenodo.org/ENLACE_ZENODO',
+  };
+
+  Object.entries(DOWNLOADS).forEach(([id, url]) => {
+    const btn = document.getElementById(id);
+    if (btn) btn.href = url;
+  });
+</script>
+</body>
+</html>
